@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 静态工厂方法 -->
+    <bean id="bean-by-static-method" class="com.wallfacers.spring.ioc.overview.dependency.domain.Person"
+          factory-method="createPerson"/>
+
+    <!-- 实例工厂方法 -->
+    <bean id="defaultPersonFactory" class="com.wallfacers.spring.factory.DefaultPersonFactory" />
+    <bean id="bean-by-instantiation-method" factory-bean="defaultPersonFactory" factory-method="createPerson" />
+
+    <!-- 通过FactoryBean的方式 -->
+    <bean id="bean-by-factory-bean" class="com.wallfacers.spring.factory.PersonFactoryBean" />
+
+</beans>
