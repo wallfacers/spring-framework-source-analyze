@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 基于ServiceFactorBean的方式去创建Bean 返回的是关注的类型的Bean-->
+    <bean id="bean-by-service-factory-bean"
+          class="org.springframework.beans.factory.serviceloader.ServiceFactoryBean">
+        <!-- 设置关注的类型 -->
+        <property name="serviceType" value="com.wallfacers.spring.factory.PersonFactory" />
+    </bean>
+
+    <!-- 基于ServiceLoaderFactoryBean的方式创建Bean 返回包含了关注的类型的ServiceLoader实例 -->
+    <bean id="bean-by-service-loader-factory-bean"
+          class="org.springframework.beans.factory.serviceloader.ServiceLoaderFactoryBean">
+        <property name="serviceType" value="com.wallfacers.spring.factory.PersonFactory" />
+    </bean>
+</beans>

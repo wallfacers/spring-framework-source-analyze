@@ -1,0 +1,4 @@
+com\wallfacers\spring\bean\scope\config\WebMvcConfiguration.class
+com\wallfacers\spring\bean\scope\BeanScopeSingletonPrototypeDemo$1.class
+com\wallfacers\spring\bean\scope\BeanScopeSingletonPrototypeDemo.class
+com\wallfacers\spring\bean\scope\controller\IndexController.class
