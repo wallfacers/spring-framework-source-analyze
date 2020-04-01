@@ -24,10 +24,7 @@ public class SuperPerson extends Person{
     @Override
     public String toString() {
         return "SuperPerson{" +
-                "id=" + super.getId() +
-                ", name='" + super.getName() + '\'' +
-                ", age=" + super.getAge() +
-                ", address='" + address + '\'' +
-                '}';
+                "address='" + address + '\'' +
+                '}' + ' ' + super.toString();
     }
 }

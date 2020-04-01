@@ -2,10 +2,17 @@ package com.wallfacers.spring.instantiation;
 
 import com.wallfacers.spring.factory.DefaultPersonFactory;
 import com.wallfacers.spring.factory.PersonFactory;
+import com.wallfacers.spring.ioc.overview.dependency.domain.Person;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 import static java.util.ServiceLoader.load;
@@ -38,19 +45,40 @@ public class SpecificBeanInstantiationDemo {
         // 而是包含了关注的类型的ServiceLoader实例
         // 而ServiceFactoryBean关注用户指定的类型(只返回迭代器中的第一个)
         // ServiceListFactoryBean可以返回列表
+        System.out.println("SPI:----------------------------------------------");
         PersonFactory personFactory = beanFactory.getBean(
                 "bean-by-service-factory-bean", PersonFactory.class);
         System.out.println(personFactory.createPerson());
 
-        // 2、通过ServiceLoaderFactoryBean的方式创建
+        // 2、通过ServiceListFactory的方式创建Bean
+        List<PersonFactory> personFactories = beanFactory.getBean(
+                "bean-by-service-list-factory-bean", List.class);
+        personFactories.forEach(factory -> System.out.println(factory.createPerson()));
+
+        // 3、通过ServiceLoaderFactoryBean的方式创建
         ServiceLoader<PersonFactory> personFactoryServiceLoader = beanFactory.getBean(
                 "bean-by-service-loader-factory-bean", ServiceLoader.class);
         iterateServiceLoader(personFactoryServiceLoader);
 
-        // 3、通过AbstractAutowireCapableBeanFactory#createBean的方式创建
+        System.out.println("Bean API:---------------------------------------------");
+
+        // 4、通过AbstractAutowireCapableBeanFactory#createBean的方式创建
         DefaultPersonFactory defaultPersonFactory = beanFactory.createBean(DefaultPersonFactory.class);
 
         System.out.println(defaultPersonFactory.createPerson());
+
+        System.out.println("BeanDefinition API:----------------------------------------");
+
+        // 5、通过BeanDefinitionRegistry#registerBeanDefinition的方式创建
+        if (beanFactory instanceof DefaultListableBeanFactory) {
+            DefaultListableBeanFactory defaultBeanFactory = (DefaultListableBeanFactory) beanFactory;
+            defaultBeanFactory.registerBeanDefinition(
+                    "api-register-person", createPersonBeanDefinition());
+
+            System.out.println(beanFactory.getBean("api-register-person"));
+        }
+
+
         // originalServiceLoader();
     }
 
@@ -63,5 +91,13 @@ public class SpecificBeanInstantiationDemo {
         for (PersonFactory personFactory : personFactories) {
             System.out.println(personFactory.createPerson());
         }
+    }
+
+    private static BeanDefinition createPersonBeanDefinition() {
+        return BeanDefinitionBuilder.genericBeanDefinition(Person.class)
+                .addPropertyValue("id", 1L)
+                .addPropertyValue("name", "tom")
+                .addPropertyValue("age", "22")
+                .getBeanDefinition();
     }
 }

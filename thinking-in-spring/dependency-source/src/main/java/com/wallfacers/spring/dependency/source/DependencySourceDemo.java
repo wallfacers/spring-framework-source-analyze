@@ -38,7 +38,7 @@ public class DependencySourceDemo {
     private ApplicationEventPublisher applicationEventPublisher;
 
     /**
-     * 初始化方法的执行晚于Bean的填充，或依赖注入
+     * postProcessorProperties方法的执行早于属性设置，早于初始化方法的执行
      */
     @PostConstruct
     public void initPostConstruct() {
@@ -48,32 +48,37 @@ public class DependencySourceDemo {
         getBean(ApplicationEventPublisher.class);
     }
 
-    public <T> T getBean(Class<T> type) {
+    public <T> void getBean(Class<T> type) {
         try {
-            return this.applicationContext.getBean(type);
+            this.applicationContext.getBean(type);
         } catch (NoSuchBeanDefinitionException e) {
             System.err.println(e.getMessage());
-            return null;
         }
     }
 
     public static void main(String[] args) {
 
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DependencySourceDemo.class);
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(DependencySourceDemo.class);
 
-        DependencySourceDemo dependencySourceDemo = context.getBean(DependencySourceDemo.class);
+        DependencySourceDemo dependencySourceDemo =
+                context.getBean(DependencySourceDemo.class);
 
         System.out.println("beanFactory == applicationContext : " +
-                (dependencySourceDemo.beanFactory == dependencySourceDemo.applicationContext));
+                (dependencySourceDemo.beanFactory
+                        == dependencySourceDemo.applicationContext));
 
         System.out.println("beanFactory == applicationContext : " +
-                (dependencySourceDemo.beanFactory == dependencySourceDemo.applicationContext.getAutowireCapableBeanFactory()));
+                (dependencySourceDemo.beanFactory
+                        == dependencySourceDemo.applicationContext));
 
         System.out.println("applicationContext == resourceLoader : " +
-                (dependencySourceDemo.applicationContext == dependencySourceDemo.resourceLoader));
+                (dependencySourceDemo.applicationContext
+                        == dependencySourceDemo.resourceLoader));
 
         System.out.println("resourceLoader == applicationEventPublisher : " +
-                (dependencySourceDemo.resourceLoader == dependencySourceDemo.applicationEventPublisher));
+                (dependencySourceDemo.resourceLoader
+                        == dependencySourceDemo.applicationEventPublisher));
 
 
         context.close();
