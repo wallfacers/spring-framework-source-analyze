@@ -19,6 +19,11 @@
         <property name="configFileLocation" value="classpath:META-INF/person-location.properties" />
     </bean>
 
+    <bean id="superPerson" class="com.wallfacers.spring.ioc.overview.dependency.domain.SuperPerson"
+          parent="person" primary="true">
+        <property name="address" value="杭州" />
+    </bean>
+
     <bean id="person2" class="com.wallfacers.spring.ioc.overview.dependency.domain.Person">
         <property name="id" value="2"/>
         <property name="name" value="wallfacers" />
@@ -29,13 +34,9 @@
         <property name="configFileLocation" value="classpath:META-INF/person-location.properties" />
     </bean>
 
-    <bean id="superPerson" class="com.wallfacers.spring.ioc.overview.dependency.domain.SuperPerson"
-          parent="person" primary="true">
-        <property name="address" value="杭州" />
-    </bean>
-
     <bean id="objectFactory"
           class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
         <property name="targetBeanName" value="person" />
     </bean>
+
 </beans>

@@ -11,6 +11,13 @@
         <property name="serviceType" value="com.wallfacers.spring.factory.PersonFactory" />
     </bean>
 
+    <!-- 基于ServiceListFactorBean的方式去创建Bean 返回的是关注的类型的Bean列表-->
+    <bean id="bean-by-service-list-factory-bean"
+          class="org.springframework.beans.factory.serviceloader.ServiceListFactoryBean">
+        <!-- 设置关注的类型 -->
+        <property name="serviceType" value="com.wallfacers.spring.factory.PersonFactory" />
+    </bean>
+
     <!-- 基于ServiceLoaderFactoryBean的方式创建Bean 返回包含了关注的类型的ServiceLoader实例 -->
     <bean id="bean-by-service-loader-factory-bean"
           class="org.springframework.beans.factory.serviceloader.ServiceLoaderFactoryBean">

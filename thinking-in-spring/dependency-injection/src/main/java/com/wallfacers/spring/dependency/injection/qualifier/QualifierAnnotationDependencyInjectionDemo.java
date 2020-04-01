@@ -27,6 +27,14 @@ public class QualifierAnnotationDependencyInjectionDemo {
 
     /**
      * 获取XML文件的Person列表
+     * BUG:
+     * 这里只是注入了XML配置的几个Person的原因：
+     * 可查看DefaultListableBeanFactory#findAutowireCandidates实现，这是因为在候选Bean查找的过程中
+     * 如果结果集不为空就直接放回了，不会执行对自引用的Bean判断添加，这里的引用表示自己注入自己
+     * 或者该Bean是由当前类通过@Bean创建的，我们知道@Bean的创建其实就是工厂方法
+     * 出现这种情况是因为使用了Xml和注解上下文混搭的情况。或者在该类外部也定义候选类型的Bean
+     * 具体可查看https://github.com/spring-projects/spring-framework/issues/23934
+     * 将@Bean创建方法编程一个静态的，就会打破这种自引用性问题
      */
     @Autowired
     private Collection<Person> allPersons;
